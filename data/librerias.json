@@ -1,0 +1,57 @@
+[
+  {
+    "nombre": "Libreria Euler",
+    "x": 578, 
+    "y": 108
+  },
+  {
+    "nombre": "Libreria Gadner",
+    "x": 87,
+    "y": 158
+  },
+  {
+    "nombre": "Libreria Voronoi",
+    "x": 300,
+    "y": 241
+  },
+  {
+    "nombre": "Libreria Gauss",
+    "x": 814,
+    "y": 241
+  },
+  {
+    "nombre": "Libreria Konisberg",
+    "x": 1032,
+    "y": 152
+  },
+  { 
+    "nombre": "Casita",
+    "x": 528,
+    "y": 340
+  },
+  {
+    "nombre": "Libreria Richter",
+    "x": 962,
+    "y": 362
+  },
+  {
+    "nombre": "Libreria Fibonacci",
+    "x": 87,
+    "y": 520
+  },
+  {
+    "nombre": "Libreria Fahrenheit",
+    "x": 669,
+    "y": 450
+  },
+  {
+    "nombre": "Libreria Hilbert",
+    "x": 322,
+    "y": 520
+  },
+  {
+    "nombre": "Libreria Celsius",
+    "x": 1032,
+    "y": 542
+  }
+]
