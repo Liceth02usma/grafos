@@ -5,6 +5,7 @@ class Vertice:
     # Constructor
     def __init__(self, nombre, x, y):
         self.nombre = nombre
+        self.Id = 0
         self.listaAdyacentes = []
         self.x = x
         self.y = y

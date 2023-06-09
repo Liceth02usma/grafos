@@ -12,15 +12,18 @@ class Interfaz:
         self.grafo = grafo # Grafo
         self.ventana = Tk() # Ventana
         self.ventana.geometry("1200x650") # Tamaño de la ventana
-        self.ventana.title("Ciudad coyote") # Nombre del Proyecto
+        self.ventana.title("Aeropuertis") # Nombre del Proyecto
         self.ventana.resizable(width=False, height=False) # no renderización de la ventana 
         self.xyz22 = Canvas(self.ventana) # Manejo de la  superficie  
         self.xyz22.pack(fill=BOTH, expand=True) # Posicionamiento
         self.urlFondo = "./recursos/fondo.png"
+        self.ok_agregar = tk.BooleanVar()
+        self.ok_agregarV = tk.BooleanVar()
+        self.lista = []
         self.agregarFondo()
         self.imagenes = []
 
-    """————————————————————————————————————————————GETS | SETS————————————————————————————————————————————————————"""
+    """————————————————————————————————————————————GETS & SETS————————————————————————————————————————————————————"""
     def getVentana(self):
         return self.ventana
     
@@ -86,12 +89,11 @@ class Interfaz:
     
     def crearVertices(self, listaVertices):
         for vertice in listaVertices:
-            self.crearVertice(
+            vertice.Id = self.crearVertice(
                 vertice.getX(), vertice.getY(), vertice.getNombre(), vertice.getImagen()
             )
     
     def crearVertice(self, x, y, nombre, imagen):
-        """Crea una nueva imagen de un planeta en el canvas."""
         # urlImagen = "./images/casita.png"
         self.imagenes.append(None)
         self.imagenes[len(self.imagenes) - 1] = PhotoImage(file=imagen)
