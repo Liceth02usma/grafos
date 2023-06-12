@@ -12,13 +12,14 @@ class Interfaz:
         self.grafo = grafo # Grafo
         self.ventana = Tk() # Ventana
         self.ventana.geometry("1200x650") # Tamaño de la ventana
-        self.ventana.title("Aeropuertis") # Nombre del Proyecto
+        self.ventana.title("Aeropuertos") # Nombre del Proyecto
         self.ventana.resizable(width=False, height=False) # no renderización de la ventana 
         self.xyz22 = Canvas(self.ventana) # Manejo de la  superficie  
         self.xyz22.pack(fill=BOTH, expand=True) # Posicionamiento
         self.urlFondo = "./recursos/fondo.png"
         self.ok_agregar = tk.BooleanVar()
         self.ok_agregarV = tk.BooleanVar()
+        self.ok_agregar_edit = tk.BooleanVar()
         self.lista = []
         self.agregarFondo()
         self.imagenes = []
@@ -43,15 +44,18 @@ class Interfaz:
     
     def crearAristas(self):
         for arista in self.grafo.listaAristas:
+            
             origen = self.grafo.obtenerVertice(arista.getOrigen(), self.grafo.getListaVertices())
             destino = self.grafo.obtenerVertice(arista.getDestino(), self.grafo.getListaVertices())
-            self.crearArista(
+            id = self.crearArista(
                 origen.getX(),
                 origen.getY(),
                 destino.getX(),
                 destino.getY(),
-                arista.getPeso()
+                arista.getPeso(),
+                f"{arista.peso}km-{arista.tiempo}m"
                 )
+            arista.Id = id
 
     def crearAristasRecorrido(self, recorrido, color):
         self.xyz22.delete("recorrido")
@@ -70,21 +74,22 @@ class Interfaz:
                 6,
             )
     
-    def crearArista(self, x1, y1, x2, y2, peso, color="#3c3c3c", tag="linea", grosor=3):
+    def crearArista(self, x1, y1, x2, y2, peso, string, color="#3c3c3c", tag="linea", grosor=3.2):
         """Crea una nueva linea entre dos vertices."""
 
-        self.xyz22.create_line(
+        id = self.xyz22.create_line(
             x1, y1 + 25, x2, y2 + 25, fill=color, width=grosor, tags=[tag]
         )
-    
+
         if peso > 0:
             self.xyz22.create_text(
                 (x1 + x2) / 2,
                 ((y1 + 25 + y2 + 25) / 2) - 10,
-                text=peso,
-                font="Roboto 20 italic",
+                text=string,
+                font="Roboto 13 italic",
                 tags=["peso"],
             )
+        return id
 
     
     def crearVertices(self, listaVertices):
@@ -98,9 +103,9 @@ class Interfaz:
         self.imagenes.append(None)
         self.imagenes[len(self.imagenes) - 1] = PhotoImage(file=imagen)
         idImg = self.xyz22.create_image(
-            x, y, image=self.imagenes[len(self.imagenes) - 1], anchor="center"
+            x, y, image=self.imagenes[len(self.imagenes) - 1], anchor="center", tags=["imagen"]
         )
-        self.xyz22.create_text(x + 5, y - 35, text=nombre, font="Cascadia 19 roman", fill="#E74C3C")
+        self.xyz22.create_text(x + 5, y - 35, text=nombre, font="Cascadia 14 roman", fill="#E74C3C", tags=["texto_imagen"])
         return idImg
 
 
@@ -110,7 +115,7 @@ class Interfaz:
         for arista in self.grafo.listaAristas:
             origen = self.grafo.obtenerVertice(arista.getOrigen(), self.grafo.getListaVertices())
             destino = self.grafo.obtenerVertice(arista.getDestino(), self.grafo.getListaVertices())
-            print("oe",arista.getColor())
+            
             self.crearArista(
                 origen.getX(),
                 origen.getY(),

@@ -66,10 +66,10 @@ class Grafo:
    """—————————————————————————————————————————FUNCIONES ARISTA—————————————————————————————————————————————————"""
 
    # Ingresar arista
-   def ingresarArista(self, origen, destino, peso):
+   def ingresarArista(self, origen, destino, peso,tiempo):
       if not self.existeArista(origen, destino, self.listaAristas):
          if self.existeVertice(origen, self.listaVertices) and self.existeVertice(destino, self.listaVertices):
-            self.listaAristas.append(Arista(origen, destino, peso))
+            self.listaAristas.append(Arista(origen, destino, peso,tiempo))
             self.obtenerVertice(origen, self.listaVertices).getListaAdyacentes().append(destino)
 
    # Existe arista
@@ -82,7 +82,7 @@ class Grafo:
    # Obtener Arista
    def obtenerArista(self, origen, destino, lista):
       for i in lista:
-         if origen == i.getOrigen() and destino == i.getDestino():
+         if origen.lower() == i.getOrigen().lower() and destino.lower() == i.getDestino().lower():
             return i
    
    # Obtener arista de menor peso
@@ -118,7 +118,7 @@ class Grafo:
                crear = False
                break
          if crear:
-            self.ingresarArista(i.getDestino(), i.getOrigen(), i.getPeso())
+            self.ingresarArista(i.getDestino(), i.getOrigen(), i.getPeso(),i.tiempo)
    
    # Convertir no dirigido a dirigido
    def dirigido(self):
@@ -213,7 +213,7 @@ class Grafo:
       return self.ordenarKruskal(visitados, aristas, recorrido)
 
    # Dijkstra
-   def dijkstra(self, origen, destino):
+   def dijkstra(self, origen, destino):  #Comentar cada linea  //se puede dividir para obtener una equivalencia para djkstra
       verticesAux = []
       verticesD = []
       caminos = self.ordenarDijkstra(origen, verticesAux)
@@ -227,7 +227,7 @@ class Grafo:
       visitados = []  # lista de visitados
       caminos = []  # recorrido final
 
-      for v in self.listaVertices:  # iniciar los valores en infinito
+      for v in self.listaVertices:  
          caminos.append(float("inf"))
          visitados.append(False)
          verticesAux.append(None)
@@ -499,10 +499,31 @@ class Grafo:
          return temp[0]  # es la menor
 
       return None#es la menor
-      
+   
+   
+   
+   def serializar_objeto(self, objeto):
+      if isinstance(objeto,Arista):
+             return {
+            "origen": objeto.origen, 
+            "destino": objeto.destino,
+            "distancia": objeto.distancia,
+            "tiempo": objeto.tiempo,
+            "peso": objeto.peso,
+            "Id": objeto.Id
+            }
+      raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")
+   
+   
+   def serializar_objeto2(self, objeto):
+      if isinstance(objeto,Vertice):
+             return {
+            "nombre": objeto.nombre, 
+            "x": objeto.x,
+            "y": objeto.y
+            }
+      raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")      
 
-
-      
 
 
 

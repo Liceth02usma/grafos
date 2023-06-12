@@ -3,10 +3,13 @@
 class Arista:
 
     # Constructor
-    def __init__(self, origen, destino, peso):
+    def __init__(self, origen, destino, peso,tiempo):
         self.origen = origen
         self.destino = destino
+        self.distancia = peso
+        self.tiempo = tiempo
         self.peso = peso
+        self.Id = None
 
     """————————————————————————————————————————————GETS | SETS————————————————————————————————————————————————————"""
     # Set - Get | origen
