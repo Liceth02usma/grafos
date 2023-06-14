@@ -151,15 +151,33 @@ def editar_valor(id):
 # Dijkstra
 """ Encuentra la ruta mas corta de entre 2 vertices en específicos"""
 def dijkstra():
-    value = messagebox.askquestion("Dijkstra", "desea buscar por tiempo\n Nota: Se tomara por defecto el valor de distancia")
-    origen ="Matecaña"
+    value = messagebox.askquestion("Dijkstra", "Desea buscar por tiempo\n Nota: si No se tomara por defecto el valor de distancia")
+    if value == "Si":
+        for i in aeropuertos.listaAristas:
+            i.peso = i.tiempo
+    while True:
+        try:
+            origen =simpledialog.askstring("Origen", "Ingrese el origen: ")
+            if aeropuertos.existeVertice(origen,aeropuertos.listaVertices):
+                break
+        except:
+            messagebox.showinfo("¡Error!","El valor no es correcto")
+        
     string_mostrar = ""
     cont= 1
     for i in librerias:
         string_mostrar += f'{cont}-{i["nombre"]}\n'
         cont += 1
     # Verifica la entrada de lita de el numero del destino
-    destino = Keyboard.readIntRangeDefaultErrorMessage(f'{string_mostrar}\nIngrese El numero del destino:',1,12)
+    while True:
+        try:
+            destino =int(simpledialog.askstring("Destino", f"{string_mostrar}\nIngrese El numero del destino:"))
+            if destino >= 1 and destino <= 12:
+                break
+            
+        except:
+            messagebox.showinfo("¡Error!","El valor no es correcto")
+    print(string_mostrar)
     dijkstra = aeropuertos.dijkstra(origen, librerias[destino-1]["nombre"])
     algoritmo = "Dijkstra" + "  [" + origen + "] ---> ["+ librerias[destino-1]["nombre"] + "]"  
     interfaz.xyz22.delete("titulo-recorrido")
@@ -173,6 +191,9 @@ def dijkstra():
             fill="#8908DB"
         )
     interfaz.crearAristasRecorrido(dijkstra, "#8908DB")
+    if value == "Si":
+        for i in aeropuertos.listaAristas:
+            i.peso = i.distancia
 
 
 
