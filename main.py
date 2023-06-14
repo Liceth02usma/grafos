@@ -129,9 +129,12 @@ def opcion(indice,indice2):
     
 def editar_valor(id):
     arista = None
-    for i in aeropuertos.listaAristas:
-        if i.Id == id:
-            arista = i
+    try:
+        for i in aeropuertos.listaAristas:
+            if i.Id == id:
+                arista = i
+    except:
+        print("Error")
     origen = arista.origen
     destino = arista.destino
     arista = aeropuertos.obtenerArista(origen, destino, aeropuertos.listaAristas)
@@ -145,7 +148,7 @@ def editar_valor(id):
         interfaz.crearAristas()
         interfaz.crearVertices(aeropuertos.listaVertices)
         interfaz.getVentana().update()
-        actualizar_data_ruta()
+    actualizar_data_ruta()
 
 
 # Dijkstra
