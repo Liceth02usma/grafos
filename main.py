@@ -15,7 +15,7 @@ from helpers.Keyboard import *
 aeropuertos = Grafo() # Creación del grafo
 interfaz = Interfaz(aeropuertos) # Creación de la interfaz
 
-
+librerias = None
 
 # Rutas archivos json
 rutaLibrerias = r'.\data\aeropuertos.json'
@@ -23,8 +23,8 @@ rutaRutas = r'.\data\rutas.json'
 
 # Leer json y crear librerías
 with open(rutaLibrerias, 'r') as json_file:
-    libreriasData = json.loads(json_file.read())
-    for l in libreriasData:
+    librerias = json.loads(json_file.read())
+    for l in librerias:
         aux = Vertice(**l)
         aeropuertos.ingresarVertice(aux.getNombre(), aux.getX(), aux.getY())
 
@@ -46,12 +46,6 @@ def actualizar_data_aeropuertos():
     
 # Convertir grafo a no dirigido
 aeropuertos.noDirigido() 
-print(len(aeropuertos.listaVertices))
-# Camino bloqueado
-
-    
-
-# Profundidad 
 
 
 
@@ -157,13 +151,16 @@ def editar_valor(id):
 # Dijkstra
 """ Encuentra la ruta mas corta de entre 2 vertices en específicos"""
 def dijkstra():
-    origen ="Casita"
+    origen ="Matecaña"
+    string_mostrar = ""
+    cont= 1
+    for i in librerias:
+        string_mostrar += f'{cont}-{i["nombre"]}\n'
+        cont += 1
     # Verifica la entrada de lita de el numero del destino
-    destino = Keyboard.readIntRangeDefaultErrorMessage("0-Casita\n1-Libreria Euler\n2-Libreria Gadner\n3-Libreria Voronoi\n4-Libreria Gauss\n5-Libreria Konisberg\n6-Libreria Richter\n7-Libreria Fibonacci\n8-Libreria Fahrenheit\n9-Libreria Hilbert\n10-Libreria Celsius\nIngrese El numero del destino:",0,10)
-    dijkstra = aeropuertos.dijkstra(origen, librerias[destino])
-    for i in dijkstra:
-        print(i.peso, i.origen, i.destino)
-    algoritmo = "Dijkstra" + "  [" + origen + "] ---> ["+ librerias[destino] + "]"  
+    destino = Keyboard.readIntRangeDefaultErrorMessage(f'{string_mostrar}\nIngrese El numero del destino:',1,12)
+    dijkstra = aeropuertos.dijkstra(origen, librerias[destino-1]["nombre"])
+    algoritmo = "Dijkstra" + "  [" + origen + "] ---> ["+ librerias[destino-1]["nombre"] + "]"  
     interfaz.xyz22.delete("titulo-recorrido")
     interfaz.getXyz22().create_text(
             300,
@@ -176,60 +173,7 @@ def dijkstra():
         )
     interfaz.crearAristasRecorrido(dijkstra, "#8908DB")
 
-# Prim
-""" Encuentra un árbol de expanción mínima a partir de un vertice"""
-def prim():
-    origen = Keyboard.readIntRangeDefaultErrorMessage("0-Casita\n1-Libreria Euler\n2-Libreria Gadner\n3-Libreria Voronoi\n4-Libreria Gauss\n5-Libreria Konisberg\n6-Libreria Richter\n7-Libreria Fibonacci\n8-Libreria Fahrenheit\n9-Libreria Hilbert\n10-Libreria Celsius\nIngrese El numero del origen:",0,10)
-    prim = aeropuertos.prim([],[],[],librerias[origen])
-    interfaz.crearAristasRecorrido(prim, "#6EF300")
-    interfaz.xyz22.delete("titulo-recorrido")
-    interfaz.getXyz22().create_text(
-            300,
-            10,
-            text="prim "+ librerias[origen],
-            anchor="nw",
-            font="Roboto 25 bold",
-            tags=["titulo-recorrido"],
-            fill="#6EF300"
-        )
 
-
-# Kruskal
-""" Encuentra un árbol de expanción mínima de en un grafo basado en las aristas"""
-def kruskal():
-
-    kruskal = aeropuertos.kruskal()
-    
-    interfaz.xyz22.delete("titulo-recorrido") # Elimina algún titulo de recorrido anterior
-
-    interfaz.getXyz22().create_text(
-            525,
-            10,
-            text="Kruskal",
-            anchor="nw",
-            font="Roboto 25 bold",
-            tags=["titulo-recorrido"],
-            fill="#028C9F"
-        )
-    interfaz.crearAristasRecorrido(kruskal, "#028C9F")
-
-# Boruvka
-def boruvka():
-
-    boruvka = aeropuertos.boruvka()
-
-    interfaz.xyz22.delete("titulo-recorrido") # Elimina algún titulo de recorrido anterior
-
-    interfaz.getXyz22().create_text(
-            525,
-            10,
-            text="boruvka",
-            anchor="nw",
-            font="Roboto 25 bold",
-            tags=["titulo-recorrido"],
-            fill="#2412DE"
-        )
-    interfaz.crearAristasRecorrido(boruvka, "#2412DE")
 
 # Función main de ejecución principal
 def main ():

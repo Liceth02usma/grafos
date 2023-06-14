@@ -120,102 +120,14 @@ class Grafo:
          if crear:
             self.ingresarArista(i.getDestino(), i.getOrigen(), i.getPeso(),i.tiempo)
    
-   # Convertir no dirigido a dirigido
-   def dirigido(self):
-      lista = copy(self.listaAristas)
-      for i in lista:
-         arista = False
-         for j in lista:
-            
-            if i.getOrigen() == j.getDestino() and i.getDestino() == j.getOrigen():
-               arista = j
-               break
-         if arista:
-            lista.pop(lista.index(arista))
-            vertice = self.obtenerVertice(arista.getOrigen(), self.listaVertices)
-            vertice.getListaAdyacentes().pop(vertice.getListaAdyacentes().index(arista.getDestino()))
 
-      self.setListaAristas(lista)
 
-   # Recorrido en profundidad
-   def recorridoProfundidad(self, nombre):
-      if nombre in self.profundidad:
-         return
-      vertice = self.obtenerVertice(nombre, self.listaVertices)
-      if vertice != None:
-         self.profundidad.append(vertice.getNombre())
-         for dato in vertice.getListaAdyacentes():
-            self.recorridoProfundidad(dato)
 
-   
-   # Recorrido en anchura
-   def recorridoAnchura(self, nombre):
-      visitados = []
-      cola =  []
-      cola.append(nombre)
-      for i in self.listaVertices:
-         visitados.append(False)
-      self.ra(cola, visitados)
-   
-
-   def recorridoProfundidad(self, dato):
-      if dato in self.profundidad:
-         return
-      else:
-         vertice = self.obtenerVertice(dato,self.listaVertices)
-         if vertice != None:
-            self.profundidad.append(vertice.getNombre())
-            for dato in vertice.getListaAdyacentes():
-               self.recorridoProfundidad(dato)
-
-      return self.profundidad
-
-   def ra(self, cola, visitados):
-      if len(cola) == 0:
-         return
-      vertice = self.obtenerVertice(cola.pop(0), self.listaVertices)
-      self.anchura.append(vertice.getNombre())
-      visitados[self.listaVertices.index(vertice)] = True
-      for a in vertice.getListaAdyacentes():
-         if not (a in cola) and not (visitados[self.listaVertices.index(self.obtenerVertice(a, self.listaVertices))]):
-            cola.append(a)
-      self.ra(cola, visitados)
-
-   # Algoritmo de kruskal
-   def kruskal(self):
-      aristas = copy(self.listaAristas)
-      # Eliminar aristas repetidas
-      for i in aristas:
-         arista = False
-         for j in aristas:
-            if i.getOrigen() == j.getDestino() and i.getDestino() == j.getOrigen():
-               arista = j
-               break
-         if arista:
-            aristas.pop(aristas.index(arista))
-      # Vertices visitados
-      visitados = []  
-      for v in self.listaVertices:
-         visitados.append(False)
-      return self.ordenarKruskal(visitados, aristas, [])
-
-   def ordenarKruskal(self, visitados, aristas, recorrido):
-      # Retornar cuando el árbol de expanción minima este formado
-      if len(recorrido) == len(self.listaVertices)-1:
-         return recorrido
-      # Eliminar aristas que formen ciclos
-      for vis in aristas:  
-         if visitados[self.listaVertices.index(self.obtenerVertice(vis.getDestino(), self.listaVertices))] == True:
-            aristas.pop(aristas.index(vis))
-      # Obtener arista de menor peso
-      menor = self.obtenerAristaMenor(aristas) 
-      recorrido.append(aristas.pop(aristas.index(menor)))
-      return self.ordenarKruskal(visitados, aristas, recorrido)
 
    # Dijkstra
-   def dijkstra(self, origen, destino):  #Comentar cada linea  //se puede dividir para obtener una equivalencia para djkstra
-      verticesAux = []
-      verticesD = []
+   def dijkstra(self, origen, destino): 
+      verticesAux = [] #lista auxiliar
+      verticesD = [] 
       caminos = self.ordenarDijkstra(origen, verticesAux)
       self.rutas(verticesD, verticesAux, destino, origen)
       aristas = []
@@ -228,7 +140,7 @@ class Grafo:
       caminos = []  # recorrido final
 
       for v in self.listaVertices:  
-         caminos.append(float("inf"))
+         caminos.append(float("inf")) #agrega el infinito
          visitados.append(False)
          verticesAux.append(None)
          if v.getNombre() == origen:
@@ -267,7 +179,7 @@ class Grafo:
 
    def menorNoVisitado(self, caminos, visitados):
       verticeMenor = None
-      caminosAux = sorted(caminos)  # de menor a mayor
+      caminosAux = sorted(caminos)  # organiza de menor a mayor
 
       copiaCaminos = copy(caminos)
       bandera = True
@@ -302,229 +214,4 @@ class Grafo:
          aux = verticesAux[indice]
       verticesD.insert(0, aux)
 
-   # Prim
-   def prim(self, visitados, aristas, recorrido, origen):
-      if len(self.listaVertices)-1 == len(visitados):
-         return recorrido
-      # Obtener vertice 
-      vertice = self.obtenerVertice(origen, self.listaVertices)
-      visitados.append(vertice)
-
-      # Obtener aristas candidatas
-      for i in vertice.getListaAdyacentes():
-         aristas.append(self.obtenerArista(origen, i, self.listaAristas))
-
-      aux = []
-      # Eliminar aristas que formen ciclos
-      for a in aristas:
-         cliclo = False
-         for v in visitados:
-            if a.getDestino() == v.getNombre():
-               cliclo = True
-               break
-         if not cliclo:
-            aux.append(a)
-      aristas = aux
-      # Obtener arista menor
-      menor = self.obtenerAristaMenor(aristas)
-      recorrido.append(aristas.pop(aristas.index(menor)))
-
-      return self.prim(visitados, aristas, recorrido, menor.getDestino())
-
-   # Bloquea una ruta en especifico y busca segunda ruta mas optima
-   def caminoBloqueado(self, origen, destino):
-      lista = self.dijkstra(origen, destino)  
-      for i in lista:
-         self.eliminarArista(i.getOrigen(), i.getDestino())
-      block = self.dijkstra(origen, destino)
-      for i in lista:
-         self.ingresarArista(i.getOrigen(), i.getDestino(), i.getPeso())
-         
-      return block
-   
-   # Boruvka
-   def boruvka(self):   
-
-      vertices = [] # Lista total de vertices
-      aristas = [] # Lista de lista de aristas adyacentes
-      recorrido = []
-
-      # Inicializar listas
-      for v in self.listaVertices:
-         # Inicializar vertices con conjunto de vertices 
-         conjuntoVertice= []
-         conjuntoVertice.append(v)
-         vertices.append(conjuntoVertice)
-         # Lista de conjuntos de menores
-         # recorrido.append([]) 
-         # Inicializar listas de aristas
-         listaAristas = []
-         for adyacente in v.getListaAdyacentes():
-            listaAristas.append(self.obtenerArista(v.getNombre(), adyacente, self.listaAristas))
-         aristas.append(listaAristas)
-   
-   def ordenarBoruvka(self, vertices, aristas, recorrido):
-      if len(recorrido) == 10:
-         return recorrido
-      # Eliminar aristas que formen ciclos
-      for i in range(len(vertices)):
-         lista = []
-         for v in vertices[i]:
-            cliclo = False
-            for arista in aristas[i]:
-               if arista.getDestino() == v.getNombre():
-                  cliclo = True
-                  break
-            if not cliclo:
-               lista.append(a)
-         aristas[i] = lista
-      aristasMin = []
-      # Obtener arista menor de un conjunto
-      for i in range(len(aristas)):
-         menor = self.obtenerAristaMenor(aristas[i])
-         aristasMin.append(aristas[i].pop(aristas[i].index(menor)))
-      # Crear conjuntos
-      conjuntos = []
-      for arista in aristasMin:
-         listaAux = [-1,-1]
-         for num in range(len(vertices)):
-            for vertice in vertices[num]:
-               if arista.getOrigen() == vertice.getNombre():
-                  listaAux[0] = num
-               if arista.getDestino() == vertice.getNombre():
-                  listaAux[1] = num
-         conjuntos.append(listaAux)
-      # Unir conjuntos
-
-
-
-   def aristasAnchura(self, origen):
-      self.recorridoAnchura(origen)
-      vertices = []
-      recorrido = []
-      for v in self.anchura:
-         vertices.append(self.obtenerVertice(v,self.listaVertices))
-      for vertice in vertices:
-         for adyacente in vertice.getListaAdyacentes():
-            visitado = False
-            for a in recorrido:
-               if adyacente == a.getDestino() or adyacente == origen:
-                  visitado = True
-                  break
-            if not visitado:
-               recorrido.append(self.obtenerArista(vertice.getNombre(),adyacente, self.listaAristas))
-      return recorrido
-
-
-   def boruvka(self):
-      copiaNodos = copy(self.listaVertices)  # copia de los nodos
-      copiaAristas = copy(self.listaAristas)  # copia de las aristas
-
-      AristasBorukvka = []
-      ListaConjuntos = []
-      bandera=True
-      cantidad=0
-      while(cantidad>1 or bandera):
-         for Nodo in copiaNodos:
-            bandera=False
-            cantidad=self.Cantidadconjuntos(ListaConjuntos)
-
-      rutas= self.OperacionesconjuntosB(Nodo, ListaConjuntos, AristasBorukvka,copiaAristas)
-      return rutas
-
-   def Cantidadconjuntos(self,ListaConjuntos):
-      cantidad=0
-      for conjunto in ListaConjuntos:
-         if len(conjunto)>0:
-            cantidad=cantidad+1
-      return cantidad
-   
-   def OperacionesconjuntosB(self,Nodo, ListaConjuntos, AristasBorukvka,copiaAristas):
-      encontrado1=-1
-      encontrado2=-1
-      # menor = self.Buscarmenor(Nodo, copiaAristas)
-
-      if not None==None:#si no esta vacio
-         if not ListaConjuntos:#si esta vacia
-            ListaConjuntos.append({menor.getOrigen(),menor.getDestino()})
-            AristasBorukvka.append(menor)
-         else:
-            for i in range(len(ListaConjuntos)):
-               if  (menor.getOrigen()  in ListaConjuntos[i]) and (menor.getDestino() in ListaConjuntos[i]):
-                  return False;##Camino cicliclo
-
-            for i in range(len(ListaConjuntos)):
-               if menor.getOrigen() in ListaConjuntos[i]:
-                  encontrado1=i
-               if menor.getDestino() in ListaConjuntos[i]:
-                  encontrado2=i
-
-            if encontrado1!=-1 and encontrado2!=-1:
-               if encontrado1!=encontrado2:#si pertenecen a dos conjuntos diferentes
-                  #debo unir los dos conjuntos
-                  ListaConjuntos[encontrado1].update(ListaConjuntos[encontrado2])
-                  ListaConjuntos[encontrado2].clear();#elimino el conjunto
-                  AristasBorukvka.append(menor)
-
-            if encontrado1!=-1 and encontrado2==-1:# si va unido por un conjunto
-               ListaConjuntos[encontrado1].update(menor.getOrigen())
-               ListaConjuntos[encontrado1].update(menor.getDestino())
-               AristasBorukvka.append(menor)
-
-            if encontrado1 == -1 and encontrado2 != -1:# si va unido por un conjunto
-               ListaConjuntos[encontrado2].update(menor.getOrigen())
-               ListaConjuntos[encontrado2].update(menor.getDestino())
-               AristasBorukvka.append(menor)
-
-            if encontrado1 == -1 and encontrado2 == -1:# si no existe en los conjuntos
-               ListaConjuntos.append({menor.getOrigen(), menor.getDestino()})
-               AristasBorukvka.append(menor)
-      return self.kruskal()
-
-
-   def Buscarmenor(self,Nodo,copiaAristas):
-      temp=[]
-      for adyacencia in Nodo.getListaAdyacentes():
-         for Arista in copiaAristas:
-            #busco las aristas de esa lista de adyacencia
-            if Arista.getOrigen()==Nodo.getNombre() and Arista.getDestino()==adyacencia:
-               temp.append(Arista)
-      if temp:#si no esta vacia
-         #una vez obtenga todas las aristas, saco la menor
-         self.Ordenar(temp)  # ordeno las aristas
-         #elimin ese destino porque ya lo voy a visitar
-         #print("{0}-{1}:{2}".format(temp[0].getOrigen(), temp[0].getDestino(), temp[0].getPeso()))
-
-         Nodo.getListaAdyacentes().remove(temp[0].getDestino())
-         return temp[0]  # es la menor
-
-      return None#es la menor
-   
-   
-   
-   def serializar_objeto(self, objeto):
-      if isinstance(objeto,Arista):
-             return {
-            "origen": objeto.origen, 
-            "destino": objeto.destino,
-            "distancia": objeto.distancia,
-            "tiempo": objeto.tiempo,
-            "peso": objeto.peso,
-            "Id": objeto.Id
-            }
-      raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")
-   
-   
-   def serializar_objeto2(self, objeto):
-      if isinstance(objeto,Vertice):
-             return {
-            "nombre": objeto.nombre, 
-            "x": objeto.x,
-            "y": objeto.y
-            }
-      raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")      
-
-
-
-
-
+  

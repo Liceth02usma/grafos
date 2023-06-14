@@ -59,7 +59,7 @@ class Interfaz:
 
     def crearAristasRecorrido(self, recorrido, color):
         self.xyz22.delete("recorrido")
-
+       
         for arista in recorrido:
             origen = self.grafo.obtenerVertice(arista.getOrigen(), self.grafo.getListaVertices())
             destino = self.grafo.obtenerVertice(arista.getDestino(), self.grafo.getListaVertices())
@@ -68,20 +68,22 @@ class Interfaz:
                 origen.getY(),
                 destino.getX(),
                 destino.getY(),
-                0,
+                arista.peso,
+                f"{arista.distancia}-{arista.tiempo}",
                 color,
                 "recorrido",
                 6,
+                False,
             )
     
-    def crearArista(self, x1, y1, x2, y2, peso, string, color="#3c3c3c", tag="linea", grosor=3.2):
+    def crearArista(self, x1, y1, x2, y2, peso, string, color="#3c3c3c", tag="linea", grosor=3.2, it=True):
         """Crea una nueva linea entre dos vertices."""
 
         id = self.xyz22.create_line(
             x1, y1 + 25, x2, y2 + 25, fill=color, width=grosor, tags=[tag]
         )
 
-        if peso > 0:
+        if peso > 0 and it:
             self.xyz22.create_text(
                 (x1 + x2) / 2,
                 ((y1 + 25 + y2 + 25) / 2) - 10,
