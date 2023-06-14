@@ -129,7 +129,9 @@ class Grafo:
       verticesAux = [] #lista auxiliar
       verticesD = [] 
       caminos = self.ordenarDijkstra(origen, verticesAux)
+      #devuelve una lista que contiene las distancias más cortas desde el origen hasta todos los demás vértices del grafo
       self.rutas(verticesD, verticesAux, destino, origen)
+      print(verticesAux)
       aristas = []
       for i in range(len(verticesD)-1):
          aristas.append(self.obtenerArista(verticesD[i],verticesD[i+1], self.listaAristas))
@@ -210,7 +212,7 @@ class Grafo:
       while aux != origen:
          verticeDestino = self.obtenerVertice(aux, self.listaVertices)
          indice = self.listaVertices.index(verticeDestino)
-         verticesD.insert(0, aux)
+         verticesD.insert(0, aux) #Comienza desde atras hacia delante
          aux = verticesAux[indice]
       verticesD.insert(0, aux)
 

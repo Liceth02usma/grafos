@@ -151,6 +151,7 @@ def editar_valor(id):
 # Dijkstra
 """ Encuentra la ruta mas corta de entre 2 vertices en específicos"""
 def dijkstra():
+    value = messagebox.askquestion("Dijkstra", "desea buscar por tiempo\n Nota: Se tomara por defecto el valor de distancia")
     origen ="Matecaña"
     string_mostrar = ""
     cont= 1
