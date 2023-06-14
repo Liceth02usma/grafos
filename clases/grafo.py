@@ -215,5 +215,28 @@ class Grafo:
          verticesD.insert(0, aux) #Comienza desde atras hacia delante
          aux = verticesAux[indice]
       verticesD.insert(0, aux)
+      
+      
+   def serializar_objeto(self, objeto):
+         if isinstance(objeto,Arista):
+            return {
+         "origen": objeto.origen, 
+         "destino": objeto.destino,
+         "distancia": objeto.distancia,
+         "tiempo": objeto.tiempo,
+         "peso": objeto.peso,
+         "Id": objeto.Id
+         }
+   raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")
+
+
+   def serializar_objeto2(self, objeto):
+      if isinstance(objeto,Vertice):
+             return {
+            "nombre": objeto.nombre, 
+            "x": objeto.x,
+            "y": objeto.y
+            }
+      raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")   
 
   
