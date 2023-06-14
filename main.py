@@ -151,16 +151,17 @@ def editar_valor(id):
 # Dijkstra
 """ Encuentra la ruta mas corta de entre 2 vertices en específicos"""
 def dijkstra():
-    origen ="Matecaña"
+    # origen ="Matecaña"
     string_mostrar = ""
     cont= 1
     for i in librerias:
         string_mostrar += f'{cont}-{i["nombre"]}\n'
         cont += 1
     # Verifica la entrada de lita de el numero del destino
+    origen = Keyboard.readIntRangeDefaultErrorMessage(f'{string_mostrar}\nIngrese El numero del destino:',1,12)
     destino = Keyboard.readIntRangeDefaultErrorMessage(f'{string_mostrar}\nIngrese El numero del destino:',1,12)
-    dijkstra = aeropuertos.dijkstra(origen, librerias[destino-1]["nombre"])
-    algoritmo = "Dijkstra" + "  [" + origen + "] ---> ["+ librerias[destino-1]["nombre"] + "]"  
+    dijkstra = aeropuertos.dijkstra(librerias[origen-1]["nombre"], librerias[destino-1]["nombre"])
+    algoritmo = "Dijkstra" + "  [" + librerias[origen-1]["nombre"] + "] ---> ["+ librerias[destino-1]["nombre"] + "]"  
     interfaz.xyz22.delete("titulo-recorrido")
     interfaz.getXyz22().create_text(
             300,

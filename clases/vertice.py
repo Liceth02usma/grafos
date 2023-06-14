@@ -10,7 +10,7 @@ class Vertice:
         self.x = x
         self.y = y
         # self.imagen = "./recursos/icono_libreria.jpg"
-        self.imagen = "./recursos/icono_libreria.png"
+        self.imagen = "./recursos/avion.png"
 
 
     """————————————————————————————————————————————GETS | SETS————————————————————————————————————————————————————"""
