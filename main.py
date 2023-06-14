@@ -142,7 +142,7 @@ def editar_valor(id):
     indice = aeropuertos.listaAristas.index(arista)
     indice2 = aeropuertos.listaAristas.index(arista2)
     value = messagebox.askquestion("Confirmar", f"¿Desea actualizar la ruta?:\n {origen} - {destino}")
-    if value != "No":
+    if value != "no":
         opcion(indice,indice2)
         interfaz.xyz22.delete("peso")
         interfaz.crearAristas()
@@ -155,7 +155,8 @@ def editar_valor(id):
 """ Encuentra la ruta mas corta de entre 2 vertices en específicos"""
 def dijkstra():
     value = messagebox.askquestion("Dijkstra", "Desea buscar por tiempo\n Nota: si No se tomara por defecto el valor de distancia")
-    if value == "Si":
+    if value != "no":
+        print("Paso por aca")
         for i in aeropuertos.listaAristas:
             i.peso = i.tiempo
     while True:
@@ -194,7 +195,7 @@ def dijkstra():
             fill="#8908DB"
         )
     interfaz.crearAristasRecorrido(dijkstra, "#8908DB")
-    if value == "Si":
+    if value != "no":
         for i in aeropuertos.listaAristas:
             i.peso = i.distancia
 

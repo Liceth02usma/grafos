@@ -227,7 +227,7 @@ class Grafo:
          "peso": objeto.peso,
          "Id": objeto.Id
          }
-   raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")
+         raise TypeError("El objeto no es una instancia de la clase 'Objeto'.")
 
 
    def serializar_objeto2(self, objeto):
